@@ -1,0 +1,8 @@
+language: csharp
+solution: BinaryEncoding.sln
+install:
+  - nuget restore BinaryEncoding.sln
+  - nuget install NUnit.Runners -Version 3.4.1 -OutputDirectory testrunner
+script:
+  - xbuild /p:Configuration=Release BinaryEncoding.sln
+  - mono ./testrunner/NUnit.Runners.3.4.1/tools/nunit-console.exe ./BinaryEncoding.Tests/bin/Release/BinaryEncoding.Tests.dll
