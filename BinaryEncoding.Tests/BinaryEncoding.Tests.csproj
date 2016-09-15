@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F5327D77-B743-49A8-BB7F-79585D093DD6}</ProjectGuid>
+    <ProjectGuid>{9BFD6C07-DABA-4119-BD6B-D68C0FFD002E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BinaryEncoding</RootNamespace>
-    <AssemblyName>BinaryEncoding</AssemblyName>
+    <RootNamespace>BinaryEncoding.Tests</RootNamespace>
+    <AssemblyName>BinaryEncoding.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.framework, Version=3.4.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.3.4.1\lib\net45\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Buffers.4.0.0\lib\netstandard1.1\System.Buffers.dll</HintPath>
@@ -44,29 +48,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Binary.BigEndian.cs">
-      <DependentUpon>Binary.cs</DependentUpon>
+    <Compile Include="BinaryTests.BigEndian.cs">
+      <DependentUpon>BinaryTests.cs</DependentUpon>
     </Compile>
-    <Compile Include="Binary.cs" />
-    <Compile Include="Binary.EndianCodec.cs">
-      <DependentUpon>Binary.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Binary.Extensions.cs">
-      <DependentUpon>Binary.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Binary.LittleEndian.cs">
-      <DependentUpon>Binary.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Binary.Stream.cs">
-      <DependentUpon>Binary.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Binary.Varint.cs">
-      <DependentUpon>Binary.cs</DependentUpon>
+    <Compile Include="BinaryTests.cs" />
+    <Compile Include="BinaryTests.LittleEndian.cs">
+      <DependentUpon>BinaryTests.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BinaryEncoding\BinaryEncoding.csproj">
+      <Project>{f5327d77-b743-49a8-bb7f-79585d093dd6}</Project>
+      <Name>BinaryEncoding</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
