@@ -1,6 +1,7 @@
 # BinaryEncoding
 
 [![Build Status](https://travis-ci.org/tabrath/BinaryEncoding.svg?branch=master)](https://travis-ci.org/tabrath/BinaryEncoding)
+[![Build status](https://ci.appveyor.com/api/projects/status/p5x257u2645daj8b/branch/master?svg=true)](https://ci.appveyor.com/project/tabrath/binaryencoding/branch/master)
 [![NuGet Badge](https://buildstats.info/nuget/BinaryEncoding)](https://www.nuget.org/packages/BinaryEncoding/)
 
 BinaryEncoding simplifies the encoding of numbers to BigEndian, LittleEndian and Varint to byte arrays.
