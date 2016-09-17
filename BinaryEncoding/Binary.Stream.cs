@@ -23,9 +23,10 @@ namespace BinaryEncoding
                 if (!stream.CanRead)
                     throw new Exception("Stream is not readable");
 
-                var buffer = GetBuffer(Marshal.SizeOf<T>());
-                var bytesRead = stream.Read(buffer, 0, buffer.Length);
-                if (bytesRead != buffer.Length)
+                var size = Marshal.SizeOf<T>();
+                var buffer = GetBuffer(size);
+                var bytesRead = stream.Read(buffer, 0, size);
+                if (bytesRead != size)
                     throw new Exception("Could not read full length");
 
                 T result = func(buffer, 0);
@@ -41,8 +42,9 @@ namespace BinaryEncoding
                 if (!stream.CanRead)
                     throw new Exception("Stream is not readable");
 
-                var buffer = GetBuffer(Marshal.SizeOf<T>());
-                var bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
+                var size = Marshal.SizeOf<T>();
+                var buffer = GetBuffer(size);
+                var bytesRead = await stream.ReadAsync(buffer, 0, size);
                 if (bytesRead != buffer.Length)
                     throw new Exception("Could not read full length");
 
@@ -87,9 +89,10 @@ namespace BinaryEncoding
                 if (!stream.CanWrite)
                     throw new Exception("Stream is not writable");
 
-                var buffer = GetBuffer(Marshal.SizeOf<T>());
+                var size = Marshal.SizeOf<T>();
+                var buffer = GetBuffer(size);
                 var length = func(value, buffer, 0);
-                stream.Write(buffer, 0, length);
+                stream.Write(buffer, 0, size);
                 FreeBuffer(buffer);
                 return length;
             }
@@ -102,9 +105,10 @@ namespace BinaryEncoding
                 if (!stream.CanWrite)
                     throw new Exception("Stream is not writable");
 
-                var buffer = GetBuffer(Marshal.SizeOf<T>());
+                var size = Marshal.SizeOf<T>();
+                var buffer = GetBuffer(size);
                 var length = func(value, buffer, 0);
-                await stream.WriteAsync(buffer, 0, length);
+                await stream.WriteAsync(buffer, 0, size);
                 FreeBuffer(buffer);
                 return length;
             }

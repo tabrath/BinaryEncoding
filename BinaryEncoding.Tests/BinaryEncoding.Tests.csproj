@@ -45,6 +45,9 @@
     <Compile Include="BinaryTests.LittleEndian.cs">
       <DependentUpon>BinaryTests.cs</DependentUpon>
     </Compile>
+    <Compile Include="BinaryTests.Stream.cs">
+      <DependentUpon>BinaryTests.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
