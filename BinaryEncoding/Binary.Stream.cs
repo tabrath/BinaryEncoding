@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,8 +11,10 @@ namespace BinaryEncoding
     {
         public abstract partial class EndianCodec
         {
-            private static byte[] GetBuffer(int size) => ArrayPool<byte>.Shared.Rent(size);
-            private static void FreeBuffer(byte[] buffer) => ArrayPool<byte>.Shared.Return(buffer);
+            public static IBufferPool BufferPool = null;
+
+            private static byte[] GetBuffer(int size) => BufferPool != null ? BufferPool.Rent(size) : new byte[size];
+            private static void FreeBuffer(byte[] buffer) => BufferPool?.Return(buffer);
 
             private static T Read<T>(Stream stream, Func<byte[], int, T> func)
             {
@@ -23,7 +24,7 @@ namespace BinaryEncoding
                 if (!stream.CanRead)
                     throw new Exception("Stream is not readable");
 
-                var size = Marshal.SizeOf<T>();
+                var size = Marshal.SizeOf(typeof(T));
                 var buffer = GetBuffer(size);
                 var bytesRead = stream.Read(buffer, 0, size);
                 if (bytesRead != size)
@@ -42,7 +43,7 @@ namespace BinaryEncoding
                 if (!stream.CanRead)
                     throw new Exception("Stream is not readable");
 
-                var size = Marshal.SizeOf<T>();
+                var size = Marshal.SizeOf(typeof(T));
                 var buffer = GetBuffer(size);
                 var bytesRead = await stream.ReadAsync(buffer, 0, size);
                 if (bytesRead != buffer.Length)
@@ -89,7 +90,7 @@ namespace BinaryEncoding
                 if (!stream.CanWrite)
                     throw new Exception("Stream is not writable");
 
-                var size = Marshal.SizeOf<T>();
+                var size = Marshal.SizeOf(typeof(T));
                 var buffer = GetBuffer(size);
                 var length = func(value, buffer, 0);
                 stream.Write(buffer, 0, size);
@@ -105,7 +106,7 @@ namespace BinaryEncoding
                 if (!stream.CanWrite)
                     throw new Exception("Stream is not writable");
 
-                var size = Marshal.SizeOf<T>();
+                var size = Marshal.SizeOf(typeof(T));
                 var buffer = GetBuffer(size);
                 var length = func(value, buffer, 0);
                 await stream.WriteAsync(buffer, 0, size);

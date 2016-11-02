@@ -12,12 +12,14 @@ To set values to an array of bytes:
 ``` cs
 Binary.BigEndian.Set(bytes, offset, value);
 Binary.LittleEndian.Set(bytes, offset, value);
+Binary.Varint.Write(bytes, offset, value);
 ```
 
 Extension methods are provided for retrieving the bytes:
 ``` cs
 Binary.BigEndian.GetBytes(value);
 Binary.LittleEndian.GetBytes(value);
+Binary.Varint.GetBytes(value);
 ```
 
 Also, for converting bytes to numbers:
@@ -34,6 +36,10 @@ Binary.LittleEndian.GetInt64(bytes, offset);
 Binary.LittleEndian.GetUInt16(bytes, offset);
 Binary.LittleEndian.GetUInt32(bytes, offset);
 Binary.LittleEndian.GetUInt64(bytes, offset);
+
+// varint, returns number of bytes consumed
+// value can be short, ushort, int, uint, long, ulong
+Binary.Varint.Read(bytes, out value);
 ```
 
 .. more to come

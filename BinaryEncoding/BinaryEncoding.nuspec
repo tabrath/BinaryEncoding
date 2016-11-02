@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/tabrath/BinaryEncoding</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Initial release.</releaseNotes>
+    <releaseNotes>Bug fixes</releaseNotes>
     <copyright>Copyright 2016</copyright>
     <tags>Binary Encoding BigEndian LittleEndian Varint</tags>
   </metadata>
