@@ -233,10 +233,10 @@ namespace BinaryEncoding
                     {
                         if (i > 9 || i == 9 && b > 1)
                         {
-                            return i;
+                            return i + 1;
                         }
                         value |= (ulong)(b << s);
-                        return i;
+                        return i + 1;
                     }
                     value |= (ulong)(b & 0x7f) << s;
                     s += 7;
