@@ -228,7 +228,11 @@ namespace BinaryEncoding
                 int s = 0;
                 for (var i = 0; ; i++)
                 {
-                    var b = (byte)stream.ReadByte();
+                    var r = stream.ReadByte();
+                    if (r == -1)
+                        throw new EndOfStreamException();
+
+                    var b = (byte)r;
                     if (b < 0x80)
                     {
                         if (i > 9 || i == 9 && b > 1)
@@ -277,8 +281,8 @@ namespace BinaryEncoding
                 byte[] buffer = new byte[1];
                 for (var i = 0; ; i++)
                 {
-                    if (await stream.ReadAsync(buffer, 0, 1) != 1)
-                        return 0;
+                    if (await stream.ReadAsync(buffer, 0, 1) < 1)
+                        throw new EndOfStreamException();
 
                     if (buffer[0] < 0x80)
                     {

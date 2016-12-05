@@ -27,6 +27,9 @@ namespace BinaryEncoding
                 var size = Marshal.SizeOf(typeof(T));
                 var buffer = GetBuffer(size);
                 var bytesRead = stream.Read(buffer, 0, size);
+                if (bytesRead <= 0)
+                    throw new EndOfStreamException();
+
                 if (bytesRead != size)
                     throw new Exception("Could not read full length");
 
@@ -46,6 +49,8 @@ namespace BinaryEncoding
                 var size = Marshal.SizeOf(typeof(T));
                 var buffer = GetBuffer(size);
                 var bytesRead = await stream.ReadAsync(buffer, 0, size);
+                if (bytesRead <= 0)
+                    throw new EndOfStreamException();
                 if (bytesRead != buffer.Length)
                     throw new Exception("Could not read full length");
 
