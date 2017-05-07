@@ -7,13 +7,15 @@
     <DefineConstants>$(DefineConstants);UNSAFE</DefineConstants>
     <authors>Trond Arne Bråthen</authors>
     <owners>Trond Arne Bråthen</owners>
-    <licenseUrl>https://github.com/tabrath/BinaryEncoding/blob/master/LICENSE</licenseUrl>
-    <projectUrl>https://github.com/tabrath/BinaryEncoding</projectUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <PackageId>BinaryEncoding</PackageId>
+    <PackageLicenseUrl>https://github.com/tabrath/BinaryEncoding/blob/master/LICENSE</PackageLicenseUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/tabrath/BinaryEncoding</RepositoryUrl>
     <description>Easily encode numbers to and from binary format</description>
     <releaseNotes></releaseNotes>
     <copyright>Copyright 2017</copyright>
-    <tags>Binary Encoding BigEndian LittleEndian Varint</tags>
+    <PackageTags>Binary Encoding BigEndian LittleEndian Varint</PackageTags>
+    <VersionPrefix>1.3.0</VersionPrefix>
   </PropertyGroup>
 
 </Project>
