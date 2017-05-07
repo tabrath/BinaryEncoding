@@ -24,7 +24,7 @@ namespace BinaryEncoding
                 if (!stream.CanRead)
                     throw new Exception("Stream is not readable");
 
-                var size = Marshal.SizeOf(typeof(T));
+                var size = Marshal.SizeOf<T>();
                 var buffer = GetBuffer(size);
                 var bytesRead = stream.Read(buffer, 0, size);
                 if (bytesRead <= 0)
@@ -46,7 +46,7 @@ namespace BinaryEncoding
                 if (!stream.CanRead)
                     throw new Exception("Stream is not readable");
 
-                var size = Marshal.SizeOf(typeof(T));
+                var size = Marshal.SizeOf<T>();
                 var buffer = GetBuffer(size);
                 var bytesRead = await stream.ReadAsync(buffer, 0, size);
                 if (bytesRead <= 0)
@@ -95,7 +95,7 @@ namespace BinaryEncoding
                 if (!stream.CanWrite)
                     throw new Exception("Stream is not writable");
 
-                var size = Marshal.SizeOf(typeof(T));
+                var size = Marshal.SizeOf<T>();
                 var buffer = GetBuffer(size);
                 var length = func(value, buffer, 0);
                 stream.Write(buffer, 0, size);
@@ -111,7 +111,7 @@ namespace BinaryEncoding
                 if (!stream.CanWrite)
                     throw new Exception("Stream is not writable");
 
-                var size = Marshal.SizeOf(typeof(T));
+                var size = Marshal.SizeOf<T>();
                 var buffer = GetBuffer(size);
                 var length = func(value, buffer, 0);
                 await stream.WriteAsync(buffer, 0, size);
