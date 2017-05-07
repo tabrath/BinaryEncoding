@@ -1,11 +1,11 @@
 ﻿using System.IO;
-using NUnit.Framework;
+using Xunit;
 
 namespace BinaryEncoding.Tests
 {
     public partial class BinaryTests
     {
-        [Test]
+        [Fact]
         public void Stream_ReadUInt32()
         {
             var bytes = Binary.BigEndian.GetBytes(uint.MaxValue);
@@ -13,13 +13,13 @@ namespace BinaryEncoding.Tests
             {
                 var n = Binary.BigEndian.ReadUInt32(ms);
 
-                Assert.That(n, Is.EqualTo(uint.MaxValue));
-                Assert.That(ms.Position, Is.EqualTo(4));
-                Assert.That(ms.Length, Is.EqualTo(4));
+                Assert.Equal(n, uint.MaxValue);
+                Assert.Equal(ms.Position, 4);
+                Assert.Equal(ms.Length, 4);
             }
         }
 
-        [Test]
+        [Fact]
         public void Stream_ReadAndWriteUInt32()
         {
             using (var ms = new MemoryStream())
@@ -28,13 +28,13 @@ namespace BinaryEncoding.Tests
                 ms.Seek(0, SeekOrigin.Begin);
                 var n = Binary.BigEndian.ReadUInt32(ms);
 
-                Assert.That(n, Is.EqualTo(uint.MaxValue));
-                Assert.That(ms.Position, Is.EqualTo(4));
-                Assert.That(ms.Length, Is.EqualTo(4));
+                Assert.Equal(n, uint.MaxValue);
+                Assert.Equal(ms.Position, 4);
+                Assert.Equal(ms.Length, 4);
             }
         }
 
-        [Test]
+        [Fact]
         public void Stream_ReadUInt32PastEndOfStream_DoesNotBlock()
         {
             using (var ms = new MemoryStream())
@@ -43,15 +43,15 @@ namespace BinaryEncoding.Tests
                 ms.Seek(0, SeekOrigin.Begin);
                 var n = Binary.BigEndian.ReadUInt32(ms);
 
-                Assert.That(n, Is.EqualTo(uint.MaxValue));
-                Assert.That(ms.Position, Is.EqualTo(4));
-                Assert.That(ms.Length, Is.EqualTo(4));
+                Assert.Equal(n, uint.MaxValue);
+                Assert.Equal(ms.Position, 4);
+                Assert.Equal(ms.Length, 4);
 
                 Assert.Throws<EndOfStreamException>(() => Binary.BigEndian.ReadUInt32(ms));
             }
         }
 
-        [Test]
+        [Fact]
         public void Stream_ReadVarintPastEndOfStream_DoesNotBlock()
         {
             using (var ms = new MemoryStream())
@@ -61,7 +61,7 @@ namespace BinaryEncoding.Tests
                 uint n = 0;
                 Binary.Varint.Read(ms, out n);
 
-                Assert.That(n, Is.EqualTo(uint.MaxValue));
+                Assert.Equal(n, uint.MaxValue);
 
                 Assert.Throws<EndOfStreamException>(() => Binary.Varint.Read(ms, out n));
             }

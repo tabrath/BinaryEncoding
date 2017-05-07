@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard1.6;net461</TargetFrameworks>
+    <DebugType>full</DebugType>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefineConstants>$(DefineConstants);UNSAFE</DefineConstants>
+    <authors>Trond Arne Bråthen</authors>
+    <owners>Trond Arne Bråthen</owners>
+    <licenseUrl>https://github.com/tabrath/BinaryEncoding/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/tabrath/BinaryEncoding</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Easily encode numbers to and from binary format</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2017</copyright>
+    <tags>Binary Encoding BigEndian LittleEndian Varint</tags>
+  </PropertyGroup>
+
+</Project>
