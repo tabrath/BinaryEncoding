@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
+#pragma warning disable CS0675 // Bitwise-or operator used on a sign-extended operand
 
 namespace BinaryEncoding
 {
