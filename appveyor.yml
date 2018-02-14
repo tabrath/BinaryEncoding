@@ -33,9 +33,6 @@ init:
   - ps: Update-AppveyorBuild -Version $env:BUILD_VERSION
   - ps: Write-Host "Build version $env:BUILD_VERSION, NuGet version $env:NUGET_VERSION, Version suffix $env:VERSION_SUFFIX"
 
-#install:
-  #- git submodule update --init --recursive
-
 before_build:
   - appveyor-retry dotnet restore -v Minimal
 
@@ -78,7 +75,6 @@ on_success:
   - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
   - pip install codecov
   - codecov -f "%APPVEYOR_BUILD_FOLDER%\coverage.xml" -X gcov
-  #- ps: appveyor PushArtifact "$env:APPVEYOR_BUILD_FOLDER\artifacts\BinaryEncoding.$env:NUGET_VERSION.nupkg"
 
 artifacts:
   - path: artifacts\**\*.*

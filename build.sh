@@ -12,6 +12,6 @@ fi
 export FrameworkPathOverride=$(dirname $(which mono))/../lib/mono/4.5/
 
 dotnet test ./test/BinaryEncoding.Tests/BinaryEncoding.Tests.csproj -c Release -f netcoreapp1.1
-dotnet build ./test/BinaryEncoding.Tests/BinaryEncoding.Tests.csproj -c Release -f net461
+dotnet build ./test/BinaryEncoding.Tests/BinaryEncoding.Tests.csproj -c Release -f net452
 
-mono $HOME/.nuget/packages/xunit.runner.console/2.2.0/tools/xunit.console.exe ./test/BinaryEncoding.Tests/bin/Release/net461/BinaryEncoding.Tests.dll
+mono $HOME/.nuget/packages/xunit.runner.console/2.3.1/tools/452/xunit.console.exe ./test/BinaryEncoding.Tests/bin/Release/net452/BinaryEncoding.Tests.dll
