@@ -198,7 +198,7 @@ namespace BinaryEncoding
 #else
             public override ushort GetUInt16(byte[] bytes, int offset = 0)
             {
-                return (ushort)(bytes[offset + 1] | bytes[offset] << 8);
+                return (ushort)(bytes[offset] | (ushort)(bytes[offset + 1] << 8));
             }
 #endif
 
@@ -224,13 +224,13 @@ namespace BinaryEncoding
             {
                 fixed (byte* p = &bytes[offset])
                 {
-                    return (uint)(*p | *(p + 1) << 8 | *(p + 2) << 16 | *(p + 3) << 24);
+                    return (uint)*p | (uint)*(p + 1) << 8 | (uint)*(p + 2) << 16 | (uint)*(p + 3) << 24;
                 }
             }
 #else
             public override uint GetUInt32(byte[] bytes, int offset = 0)
             {
-                return bytes[offset] | (uint)bytes[offset + 1] << 8 | (uint)bytes[offset + 2] << 16 | (uint)bytes[offset + 3] << 24;
+                return (uint)bytes[offset] | (uint)bytes[offset + 1] << 8 | (uint)bytes[offset + 2] << 16 | (uint)bytes[offset + 3] << 24;
             }
 #endif
 
