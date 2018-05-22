@@ -9,8 +9,8 @@
 [![Forks](https://img.shields.io/github/forks/tabrath/BinaryEncoding.svg?longCache=true&style=flat-square&label=Forks&logo=github)](https://github.com/tabrath/BinaryEncoding/fork)
 [![Stars](https://img.shields.io/github/stars/tabrath/BinaryEncoding.svg?longCache=true&style=flat-square&label=Stars&logo=github)](https://github.com/tabrath/BinaryEncoding/star)
 [![License](https://img.shields.io/github/license/tabrath/BinaryEncoding.svg?longCache=true&style=flat-square&label=License)](https://github.com/tabrath/BinaryEncoding/blob/master/LICENSE)
-![Frameworks](https://img.shields.io/badge/frameworks-netstandard1.1%20|%20net%20v4.5.2-green.svg?longCache=true&style=flat-square)
-![Platforms](https://img.shields.io/badge/platforms-win%20|%20linux%20|%20osx-green.svg?longCache=true&style=flat-square)
+![Frameworks](https://img.shields.io/badge/Frameworks-netstandard1.1%20|%20net%20v4.5.2-green.svg?longCache=true&style=flat-square)
+![Platforms](https://img.shields.io/badge/Platforms-win%20|%20linux%20|%20osx-green.svg?longCache=true&style=flat-square)
 
 BinaryEncoding simplifies the encoding of numbers to BigEndian, LittleEndian and Varint to byte arrays.
 
