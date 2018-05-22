@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 #pragma warning disable CS0675 // Bitwise-or operator used on a sign-extended operand
 
@@ -99,6 +100,25 @@ namespace BinaryEncoding
                 return i + 1;
             }
 
+            public static Task<int> WriteAsync(Stream stream, ushort value, CancellationToken cancellationToken = default(CancellationToken)) => WriteAsync(stream, (ulong)value, cancellationToken);
+            public static Task<int> WriteAsync(Stream stream, uint value, CancellationToken cancellationToken = default(CancellationToken)) => WriteAsync(stream, (ulong)value, cancellationToken);
+
+            public static async Task<int> WriteAsync(Stream stream, ulong value, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                int i = 0;
+                byte[] buffer = new byte[1];
+                while (value >= 0x80)
+                {
+                    buffer[0] = (byte)(value | 0x80);
+                    await stream.WriteAsync(buffer, 0, 1, cancellationToken);
+                    value >>= 7;
+                    i++;
+                }
+                buffer[0] = (byte)value;
+                await stream.WriteAsync(buffer, 0, 1, cancellationToken);
+                return i + 1;
+            }
+
             public static int Write(Stream stream, short value) => Write(stream, (long)value);
             public static int Write(Stream stream, int value) => Write(stream, (long)value);
 
@@ -109,6 +129,18 @@ namespace BinaryEncoding
                     ux ^= ux;
 
                 return Write(stream, ux);
+            }
+
+            public static Task<int> WriteAsync(Stream stream, short value, CancellationToken cancellationToken = default(CancellationToken)) => WriteAsync(stream, (long)value, cancellationToken);
+            public static Task<int> WriteAsync(Stream stream, int value, CancellationToken cancellationToken = default(CancellationToken)) => WriteAsync(stream, (long)value, cancellationToken);
+
+            public static Task<int> WriteAsync(Stream stream, long value, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                var ux = (ulong)value << 1;
+                if (value < 0)
+                    ux ^= ux;
+
+                return WriteAsync(stream, ux, cancellationToken);
             }
 
             public static int Read(byte[] buffer, int offset, out ushort value)
@@ -275,14 +307,16 @@ namespace BinaryEncoding
                 return n;
             }
 
-            public static async Task<ulong> ReadAsync(Stream stream)
+            public static async Task<ulong> ReadAsync(Stream stream, CancellationToken cancellationToken = default(CancellationToken))
             {
                 ulong value = 0;
                 int s = 0;
                 byte[] buffer = new byte[1];
                 for (var i = 0; ; i++)
                 {
-                    if (await stream.ReadAsync(buffer, 0, 1) < 1)
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    if (await stream.ReadAsync(buffer, 0, 1, cancellationToken) < 1)
                         throw new EndOfStreamException();
 
                     if (buffer[0] < 0x80)
@@ -299,12 +333,28 @@ namespace BinaryEncoding
                 }
             }
 
-            public static async Task<short> ReadInt16Async(Stream stream) => (short)await ReadAsync(stream);
-            public static async Task<int> ReadInt32Async(Stream stream) => (int)await ReadAsync(stream);
-            public static async Task<long> ReadInt64Async(Stream stream) => (long)await ReadAsync(stream);
-            public static async Task<ushort> ReadUInt16Async(Stream stream) => (ushort)await ReadAsync(stream);
-            public static async Task<uint> ReadUInt32Async(Stream stream) => (uint)await ReadAsync(stream);
-            public static async Task<ulong> ReadUInt64Async(Stream stream) => (ulong)await ReadAsync(stream);
+            public static Task<short> ReadInt16Async(Stream stream, CancellationToken cancellationToken = default(CancellationToken)) => ReadAsync(stream, cancellationToken)
+                .ContinueWith(t => (short)t.Result, TaskContinuationOptions.NotOnCanceled | TaskContinuationOptions.NotOnFaulted);
+
+            public static Task<int> ReadInt32Async(Stream stream, CancellationToken cancellationToken = default(CancellationToken)) => ReadAsync(stream, cancellationToken)
+                .ContinueWith(t => (int)t.Result, TaskContinuationOptions.NotOnCanceled | TaskContinuationOptions.NotOnFaulted);
+
+            public static Task<long> ReadInt64Async(Stream stream, CancellationToken cancellationToken = default(CancellationToken)) => ReadAsync(stream, cancellationToken)
+                .ContinueWith(t =>
+                {
+                    var value = (long)(t.Result >> 1);
+                    if ((t.Result & 1) != 0)
+                        value ^= value;
+                    return value;
+                }, TaskContinuationOptions.NotOnCanceled | TaskContinuationOptions.NotOnFaulted);
+
+            public static Task<ushort> ReadUInt16Async(Stream stream, CancellationToken cancellationToken = default(CancellationToken)) => ReadAsync(stream, cancellationToken)
+                .ContinueWith(t => (ushort)t.Result, TaskContinuationOptions.NotOnCanceled | TaskContinuationOptions.NotOnFaulted);
+
+            public static Task<uint> ReadUInt32Async(Stream stream, CancellationToken cancellationToken = default(CancellationToken)) => ReadAsync(stream, cancellationToken)
+                .ContinueWith(t => (uint)t.Result, TaskContinuationOptions.NotOnCanceled | TaskContinuationOptions.NotOnFaulted);
+
+            public static Task<ulong> ReadUInt64Async(Stream stream, CancellationToken cancellationToken = default(CancellationToken)) => ReadAsync(stream, cancellationToken);
         }
     }
 }
