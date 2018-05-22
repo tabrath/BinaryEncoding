@@ -1,8 +1,16 @@
 # BinaryEncoding
 
-[![Build Status](https://travis-ci.org/tabrath/BinaryEncoding.svg?branch=master)](https://travis-ci.org/tabrath/BinaryEncoding)
-[![Build status](https://ci.appveyor.com/api/projects/status/p5x257u2645daj8b/branch/master?svg=true)](https://ci.appveyor.com/project/tabrath/binaryencoding/branch/master)
-[![NuGet Badge](https://buildstats.info/nuget/BinaryEncoding)](https://www.nuget.org/packages/BinaryEncoding/)
+[![Travis](https://img.shields.io/travis/tabrath/BinaryEncoding.svg?longCache=true&style=flat-square&label=Travis&logo=travis)](https://travis-ci.org/tabrath/BinaryEncoding)
+[![Appveyor](https://img.shields.io/appveyor/ci/tabrath/BinaryEncoding.svg?longCache=true&style=flat-square&label=Appveyor&logo=appveyor)](https://ci.appveyor.com/project/tabrath/binaryencoding/branch/master)
+[![CircleCI](https://img.shields.io/circleci/project/github/tabrath/BinaryEncoding.svg?longCache=true&style=flat-square&label=CircleCI)](https://circleci.com/gh/tabrath/BinaryEncoding)
+[![Codecov](https://img.shields.io/codecov/c/github/tabrath/BinaryEncoding.svg?longCache=true&style=flat-square&label=Codecov)](https://codecov.io/gh/tabrath/BinaryEncoding)
+[![Version](https://img.shields.io/nuget/v/BinaryEncoding.svg?longCache=true&style=flat-square&label=Version)](https://www.nuget.org/packages/BinaryEncoding)
+[![Downloads](https://img.shields.io/nuget/dt/BinaryEncoding.svg?longCache=true&style=flat-square&label=Downloads)](https://www.nuget.org/packages/BinaryEncoding)
+[![Forks](https://img.shields.io/github/forks/tabrath/BinaryEncoding.svg?longCache=true&style=flat-square&label=Forks&logo=github)](https://github.com/tabrath/BinaryEncoding/fork)
+[![Stars](https://img.shields.io/github/stars/tabrath/BinaryEncoding.svg?longCache=true&style=flat-square&label=Stars&logo=github)](https://github.com/tabrath/BinaryEncoding/star)
+[![License](https://img.shields.io/github/license/tabrath/BinaryEncoding.svg?longCache=true&style=flat-square&label=License)](https://github.com/tabrath/BinaryEncoding/blob/master/LICENSE)
+![Frameworks](https://img.shields.io/badge/frameworks-netstandard1.1%20|%20net%20v4.5.2-green.svg?longCache=true&style=flat-square)
+![Platforms](https://img.shields.io/badge/platforms-win%20|%20linux%20|%20osx-green.svg?longCache=true&style=flat-square)
 
 BinaryEncoding simplifies the encoding of numbers to BigEndian, LittleEndian and Varint to byte arrays.
 
