@@ -1,0 +1,15 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: microsoft/dotnet:1.1-sdk
+    steps:
+      - checkout
+      - run: dotnet test -f netcoreapp1.1 test/BinaryEncoding.Tests/BinaryEncoding.Tests.csproj
+  build:
+    docker:
+      - image: microsoft/dotnet:2.0-sdk
+    steps:
+      - checkout
+      - run: dotnet test -f netcoreapp2.0 test/BinaryEncoding.Tests/BinaryEncoding.Tests.csproj
+

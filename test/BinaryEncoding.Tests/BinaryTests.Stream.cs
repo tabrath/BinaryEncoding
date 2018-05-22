@@ -13,9 +13,9 @@ namespace BinaryEncoding.Tests
             {
                 var n = Binary.BigEndian.ReadUInt32(ms);
 
-                Assert.Equal(n, uint.MaxValue);
-                Assert.Equal(ms.Position, 4);
-                Assert.Equal(ms.Length, 4);
+                Assert.Equal(uint.MaxValue, n);
+                Assert.Equal(4, ms.Position);
+                Assert.Equal(4, ms.Length);
             }
         }
 
@@ -28,9 +28,9 @@ namespace BinaryEncoding.Tests
                 ms.Seek(0, SeekOrigin.Begin);
                 var n = Binary.BigEndian.ReadUInt32(ms);
 
-                Assert.Equal(n, uint.MaxValue);
-                Assert.Equal(ms.Position, 4);
-                Assert.Equal(ms.Length, 4);
+                Assert.Equal(uint.MaxValue, n);
+                Assert.Equal(4, ms.Position);
+                Assert.Equal(4, ms.Length);
             }
         }
 
@@ -43,9 +43,9 @@ namespace BinaryEncoding.Tests
                 ms.Seek(0, SeekOrigin.Begin);
                 var n = Binary.BigEndian.ReadUInt32(ms);
 
-                Assert.Equal(n, uint.MaxValue);
-                Assert.Equal(ms.Position, 4);
-                Assert.Equal(ms.Length, 4);
+                Assert.Equal(uint.MaxValue, n);
+                Assert.Equal(4, ms.Position);
+                Assert.Equal(4, ms.Length);
 
                 Assert.Throws<EndOfStreamException>(() => Binary.BigEndian.ReadUInt32(ms));
             }
@@ -61,7 +61,7 @@ namespace BinaryEncoding.Tests
                 uint n = 0;
                 Binary.Varint.Read(ms, out n);
 
-                Assert.Equal(n, uint.MaxValue);
+                Assert.Equal(uint.MaxValue, n);
 
                 Assert.Throws<EndOfStreamException>(() => Binary.Varint.Read(ms, out n));
             }

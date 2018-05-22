@@ -4,9 +4,10 @@ environment:
 version: ${PKG_VERSION}-{build}
 configuration: Release
 platform: x64
+image: Visual Studio 2017
 
 skip_commits:
-  message: /travis/
+  message: /chore/
   files:
     - '**\*.md'
     - LICENSE
@@ -33,11 +34,8 @@ init:
   - ps: Update-AppveyorBuild -Version $env:BUILD_VERSION
   - ps: Write-Host "Build version $env:BUILD_VERSION, NuGet version $env:NUGET_VERSION, Version suffix $env:VERSION_SUFFIX"
 
-#install:
-  #- git submodule update --init --recursive
-
 before_build:
-  - appveyor-retry dotnet restore -v Minimal
+  - appveyor-retry dotnet restore -v Minimal --runtime win10-x64
 
 build_script:
   - ps: |
@@ -63,11 +61,8 @@ after_build:
 
 test: off
 
-before_test:
-  - nuget install OpenCover -Version 4.6.519 -OutputDirectory .\tools
-
 test_script:
-  - .\tools\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -returntargetcode -target:"%ProgramFiles%\dotnet\dotnet.exe" -targetargs:"test %APPVEYOR_BUILD_FOLDER%\test\BinaryEncoding.Tests\BinaryEncoding.Tests.csproj -c Debug -f netcoreapp1.1 -l trx;logfilename=TestResult.xml" -filter:"+[BinaryEncoding]* -[BinaryEncoding.Benchmarks]* -[BinaryEncoding.Tests]*" -excludebyattribute:*.ExcludeFromCodeCoverage* -hideskipped:All -output:"%APPVEYOR_BUILD_FOLDER%\coverage.xml" -oldStyle
+  - dotnet test --configuration Debug --framework netcoreapp2.0 --logger trx;logfilename=TestResult.xml --results-directory "%APPVEYOR_BUILD_FOLDER%\test\BinaryEncoding.Tests\TestResults" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover %APPVEYOR_BUILD_FOLDER%\test\BinaryEncoding.Tests\BinaryEncoding.Tests.csproj
 
 after_test:
   - ps: |
@@ -75,20 +70,18 @@ after_test:
         $wc.UploadFile("https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\test\BinaryEncoding.Tests\TestResults\TestResult.xml))
 
 on_success:
-  - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
-  - pip install codecov
-  - codecov -f "%APPVEYOR_BUILD_FOLDER%\coverage.xml" -X gcov
-  #- ps: appveyor PushArtifact "$env:APPVEYOR_BUILD_FOLDER\artifacts\BinaryEncoding.$env:NUGET_VERSION.nupkg"
+  - choco install codecov
+  - codecov -f "%APPVEYOR_BUILD_FOLDER%\test\BinaryEncoding.Tests\coverage.xml"
 
 artifacts:
   - path: artifacts\**\*.*
 
 cache:
   - '%USERPROFILE%\.local'
-  - '%USERPROFILE%\.nuget\packages -> **\project.json'
+  - '%USERPROFILE%\.nuget\packages -> **\*.csproj'
   - '%LocalAppData%\NuGet\Cache'
   - '%LocalAppData%\Python'
-  - '.\packages -> **\project.json'
+  - '.\packages -> **\*.csproj'
   - '.\tools'
   - '\Python34'
 

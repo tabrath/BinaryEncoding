@@ -7,21 +7,23 @@ namespace BinaryEncoding.Tests
         [Theory]
         [InlineData(new byte[] { 0x80, 0x00 }, short.MinValue)]
         [InlineData(new byte[] { 0x7f, 0xff }, short.MaxValue)]
+        [InlineData(new byte[] { 0x3f, 0xff }, short.MaxValue / 2)]
         public void BigEndian_GetInt16(byte[] bytes, int expected)
         {
             var decoded = Binary.BigEndian.GetInt16(bytes, 0);
 
-            Assert.Equal(decoded, expected);
+            Assert.Equal(expected, decoded);
         }
 
         [Theory]
         [InlineData(new byte[] { 0x00, 0x00 }, ushort.MinValue)]
         [InlineData(new byte[] { 0xff, 0xff }, ushort.MaxValue)]
+        [InlineData(new byte[] { 0x7f, 0xff }, ushort.MaxValue / 2)]
         public void BigEndian_GetUInt16(byte[] bytes, uint expected)
         {
             var decoded = Binary.BigEndian.GetUInt16(bytes, 0);
 
-            Assert.Equal(decoded, expected);
+            Assert.Equal(expected, decoded);
         }
 
         [Theory]
@@ -37,7 +39,7 @@ namespace BinaryEncoding.Tests
         {
             var decoded = Binary.BigEndian.GetInt32(bytes, 0);
 
-            Assert.Equal(decoded, expected);
+            Assert.Equal(expected, decoded);
         }
 
         [Theory]
@@ -53,7 +55,7 @@ namespace BinaryEncoding.Tests
         {
             var decoded = Binary.BigEndian.GetUInt32(bytes, 0);
 
-            Assert.Equal(decoded, expected);
+            Assert.Equal(expected, decoded);
         }
 
         [Theory]
@@ -63,7 +65,7 @@ namespace BinaryEncoding.Tests
         {
             var decoded = Binary.BigEndian.GetInt64(bytes, 0);
 
-            Assert.Equal(decoded, expected);
+            Assert.Equal(expected, decoded);
         }
 
         [Theory]
@@ -73,7 +75,7 @@ namespace BinaryEncoding.Tests
         {
             var decoded = Binary.BigEndian.GetUInt64(bytes, 0);
 
-            Assert.Equal(decoded, expected);
+            Assert.Equal(expected, decoded);
         }
 
         [Theory]
