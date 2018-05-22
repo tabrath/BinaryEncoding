@@ -36,5 +36,5 @@ if [ $mono -eq 1 ]; then
   export FrameworkPathOverride=$(dirname $(which mono))/../lib/mono/4.5/
   nuget restore
   msbuild ./test/BinaryEncoding.Tests/BinaryEncoding.Tests.csproj /p:Configuration=Release /p:Platform=net452
-  mono $HOME/.nuget/packages/xunit.runner.console/*/tools/net452/xunit.console.exe ./test/BinaryEncoding.Tests/bin/net461/Release/net452/BinaryEncoding.Tests.dll
+  mono $HOME/.nuget/packages/xunit.runner.console/*/tools/net452/xunit.console.exe ./test/BinaryEncoding.Tests/bin/net452/Release/net452/BinaryEncoding.Tests.dll
 fi
