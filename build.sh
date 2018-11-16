@@ -28,13 +28,13 @@ if [ $dotnet -eq 1 ]; then
     dotnet restore --runtime ubuntu-x64
   fi
 
-  dotnet test ./test/BinaryEncoding.Tests/BinaryEncoding.Tests.csproj -c Release -f netcoreapp2.0 --blame
+  dotnet test ./test/BinaryEncoding.Tests/BinaryEncoding.Tests.csproj --configuration Release --framework netcoreapp2.0 --no-restore --blame
 fi
 
 if [ $mono -eq 1 ]; then
   echo "* building and testing mono"
   export FrameworkPathOverride=$(dirname $(which mono))/../lib/mono/4.5/
   nuget restore
-  msbuild ./test/BinaryEncoding.Tests/BinaryEncoding.Tests.csproj /p:Configuration=Release /p:Platform=net452
-  mono $HOME/.nuget/packages/xunit.runner.console/*/tools/net452/xunit.console.exe ./test/BinaryEncoding.Tests/bin/net452/Release/net452/BinaryEncoding.Tests.dll
+  msbuild ./test/BinaryEncoding.Tests/BinaryEncoding.Tests.csproj /p:Configuration=Release,TargetFramework=net452,Platform=x64 /restore:true
+  mono $HOME/.nuget/packages/xunit.runner.console/*/tools/net452/xunit.console.exe ./test/BinaryEncoding.Tests/bin/x64/Release/net452/BinaryEncoding.Tests.dll
 fi
