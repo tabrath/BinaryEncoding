@@ -2,7 +2,7 @@
   <Import Project="..\..\netfx.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.1</TargetFramework>
+    <TargetFrameworks>netstandard1.1;net452</TargetFrameworks>
     <authors>Trond Arne Bråthen</authors>
     <owners>Trond Arne Bråthen</owners>
     <PackageId>BinaryEncoding</PackageId>
