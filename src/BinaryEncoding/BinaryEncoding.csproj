@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.1;net452</TargetFrameworks>
+    <TargetFramework>netstandard1.1</TargetFramework>
     <authors>Trond Arne Bråthen</authors>
     <owners>Trond Arne Bråthen</owners>
     <PackageId>BinaryEncoding</PackageId>
@@ -14,7 +14,6 @@
     <PackageTags>Binary Encoding BigEndian LittleEndian Varint</PackageTags>
     <VersionPrefix>1.4.0</VersionPrefix>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
-    <PackageTargetFallback Condition=" '$(TargetFramework)' == 'net452' ">$(PackageTargetFallback);netstandard;portable-net452+win8</PackageTargetFallback>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <OutputType>Library</OutputType>
     <LangVersion>latest</LangVersion>
