@@ -3,14 +3,14 @@ solution: BinaryEncoding.sln
 
 matrix:
   include:
-    - dotnet: 2.1.300-preview2-008533
+    - dotnet: 2.1.500
       mono: none
       env: DOTNET=1
       os: linux
     - mono: latest
       env: MONO=1
       os: linux
-    - dotnet: 2.1.300-preview2-008533
+    - dotnet: 2.1.500
       mono: none
       env: DOTNET=1
       os: osx
