@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 #pragma warning disable CS0675 // Bitwise-or operator used on a sign-extended operand
@@ -39,49 +40,40 @@ namespace BinaryEncoding
                 return buffer;
             }
 
-            public static int Write(byte[] buffer, int offset, ushort value) => Write(buffer, offset, (ulong)value);
-            public static int Write(byte[] buffer, int offset, uint value) => Write(buffer, offset, (ulong)value);
+            public static int Write(Span<byte> buffer, ushort value) => Write(buffer, (ulong)value);
+            public static int Write(byte[] buffer, int offset, ushort value) => Write(buffer.AsSpan(offset), (ulong)value);
 
-#if UNSAFE
-            public static unsafe int Write(byte[] buffer, int offset, ulong value)
-            {
-                int i = 0;
-                fixed (byte* p = &buffer[offset])
-                {
-                    while (value >= 0x80)
-                    {
-                        p[i++] = (byte)(value | 0x80);
-                        value >>= 7;
-                    }
-                    p[i++] = (byte)value;
-                }
-                return i;
-            }
-#else
-            public static int Write(byte[] buffer, int offset, ulong value)
+            public static int Write(Span<byte> buffer, short value) => Write(buffer, (long)value);
+            public static int Write(byte[] buffer, int offset, short value) => Write(buffer.AsSpan(offset), (long)value);
+
+            public static int Write(byte[] buffer, int offset, uint value) => Write(buffer.AsSpan(offset), (ulong)value);
+            public static int Write(Span<byte> buffer, uint value) => Write(buffer, (ulong)value);
+
+            public static int Write(byte[] buffer, int offset, int value) => Write(buffer.AsSpan(offset), (long)value);
+            public static int Write(Span<byte> buffer, int value) => Write(buffer, (long)value);
+
+            public static int Write(byte[] buffer, int offset, ulong value) => Write(buffer.AsSpan(offset), value);
+            public static int Write(Span<byte> buffer, ulong value)
             {
                 int i = 0;
                 while (value >= 0x80)
                 {
-                    buffer[offset + i] = (byte)(value | 0x80);
+                    buffer[i] = (byte)(value | 0x80);
                     value >>= 7;
                     i++;
                 }
-                buffer[offset + i] = (byte)value;
+                buffer[i] = (byte)value;
                 return i + 1;
             }
-#endif
 
-            public static int Write(byte[] buffer, int offset, short value) => Write(buffer, offset, (long)value);
-            public static int Write(byte[] buffer, int offset, int value) => Write(buffer, offset, (long)value);
-
-            public static int Write(byte[] buffer, int offset, long value)
+            public static int Write(byte[] buffer, int offset, long value) => Write(buffer.AsSpan(offset), value);
+            public static int Write(Span<byte> buffer, long value)
             {
                 var ux = (ulong)value << 1;
                 if (value < 0)
                     ux ^= ux;
 
-                return Write(buffer, offset, ux);
+                return Write(buffer, ux);
             }
 
             public static int Write(Stream stream, ushort value) => Write(stream, (ulong) value);
@@ -143,96 +135,66 @@ namespace BinaryEncoding
                 return WriteAsync(stream, ux, cancellationToken);
             }
 
-            public static int Read(byte[] buffer, int offset, out ushort value)
+            public static int Read(byte[] buffer, int offset, out ushort value) => Read(buffer.AsSpan(offset), out value);
+            public static int Read(ReadOnlySpan<byte> buffer, out ushort value)
             {
-                ulong l;
-                var n = Read(buffer, offset, out l);
+                var n = Read(buffer, out ulong l);
                 value = (ushort)l;
                 return n;
             }
 
-            public static int Read(byte[] buffer, int offset, out uint value)
+            public static int Read(byte[] buffer, int offset, out short value) => Read(buffer.AsSpan(offset), out value);
+            public static int Read(ReadOnlySpan<byte> buffer, out short value)
             {
-                ulong l;
-                var n = Read(buffer, offset, out l);
+                var n = Read(buffer, out long l);
+                value = (short)l;
+                return n;
+            }
+
+            public static int Read(byte[] buffer, int offset, out uint value) => Read(buffer.AsSpan(offset), out value);
+            public static int Read(ReadOnlySpan<byte> buffer, out uint value)
+            {
+                var n = Read(buffer, out ulong l);
                 value = (uint)l;
                 return n;
             }
 
-#if UNSAFE
-            public static unsafe int Read(byte[] buffer, int offset, out ulong value)
+            public static int Read(byte[] buffer, int offset, out int value) => Read(buffer.AsSpan(offset), out value);
+            public static int Read(ReadOnlySpan<byte> buffer, out int value)
             {
-                fixed (byte* p = &buffer[offset])
-                {
-                    return Read(p, out value);
-                }
+                var n = Read(buffer, out long l);
+                value = (int)l;
+                return n;
             }
 
-            public static unsafe int Read(byte* buffer, out ulong value)
+            public static int Read(byte[] buffer, int offset, out ulong value) => Read(buffer.AsSpan(offset), out value);
+            public static int Read(ReadOnlySpan<byte> buffer, out ulong value)
             {
                 value = 0;
-                for (int i = 0, s = 0; i < 9; i++, s += 7)
+                int s = 0;
+                for (var i = 0; i < buffer.Length; i++)
                 {
                     if (buffer[i] < 0x80)
                     {
                         if (i > 9 || i == 9 && buffer[i] > 1)
                         {
                             value = 0;
-                            return -(i + 1);
+                            return -(i + 1); // overflow
                         }
                         value |= (ulong)(buffer[i] << s);
                         return i + 1;
                     }
                     value |= (ulong)(buffer[i] & 0x7f) << s;
-                }
-                value = 0;
-                return 0;
-            }
-#else
-            public static int Read(byte[] buffer, int offset, out ulong value)
-            {
-                value = 0;
-                int s = 0;
-                for (var i = 0; i < buffer.Length - offset; i++)
-                {
-                    if (buffer[offset + i] < 0x80)
-                    {
-                        if (i > 9 || i == 9 && buffer[offset + i] > 1)
-                        {
-                            value = 0;
-                            return -(i + 1); // overflow
-                        }
-                        value |= (ulong)(buffer[offset + i] << s);
-                        return i + 1;
-                    }
-                    value |= (ulong)(buffer[offset + i] & 0x7f) << s;
                     s += 7;
                 }
                 value = 0;
                 return 0;
             }
-#endif
 
-            public static int Read(byte[] buffer, int offset, out short value)
+            public static int Read(byte[] buffer, int offset, out long value) => Read(buffer.AsSpan(offset), out value);
+            public static int Read(ReadOnlySpan<byte> buffer, out long value)
             {
-                long l;
-                var n = Read(buffer, offset, out l);
-                value = (short)l;
-                return n;
-            }
-
-            public static int Read(byte[] buffer, int offset, out int value)
-            {
-                long l;
-                var n = Read(buffer, offset, out l);
-                value = (int)l;
-                return n;
-            }
-
-            public static int Read(byte[] buffer, int offset, out long value)
-            {
-                ulong ux;
-                int n = Read(buffer, offset, out ux);
+                int n = Read(buffer, out ulong ux);
                 value = (long)(ux >> 1);
                 if ((ux & 1) != 0)
                     value ^= value;
@@ -241,16 +203,14 @@ namespace BinaryEncoding
 
             public static int Read(Stream stream, out ushort value)
             {
-                ulong l;
-                var n = Read(stream, out l);
+                var n = Read(stream, out ulong l);
                 value = (ushort)l;
                 return n;
             }
 
             public static int Read(Stream stream, out uint value)
             {
-                ulong l;
-                var n = Read(stream, out l);
+                var n = Read(stream, out ulong l);
                 value = (uint)l;
                 return n;
             }
@@ -282,24 +242,21 @@ namespace BinaryEncoding
 
             public static int Read(Stream stream, out short value)
             {
-                ulong l;
-                var n = Read(stream, out l);
+                var n = Read(stream, out ulong l);
                 value = (short)l;
                 return n;
             }
 
             public static int Read(Stream stream, out int value)
             {
-                ulong l;
-                var n = Read(stream, out l);
+                var n = Read(stream, out ulong l);
                 value = (int)l;
                 return n;
             }
 
             public static int Read(Stream stream, out long value)
             {
-                ulong ux;
-                var n = Read(stream, out ux);
+                var n = Read(stream, out ulong ux);
                 value = (long)(ux >> 1);
                 if ((ux & 1) != 0)
                     value ^= value;
