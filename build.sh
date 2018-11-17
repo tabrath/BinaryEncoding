@@ -33,6 +33,6 @@ fi
 
 if [ $mono -eq 1 ]; then
   echo "* building and testing mono"
-  msbuild ./test/BinaryEncoding.Tests/BinaryEncoding.Tests.csproj /p:Configuration=Release,TargetFramework=net452,Platform=x64 /restore:true
+  msbuild ./test/BinaryEncoding.Tests/BinaryEncoding.Tests.csproj /p:Configuration=Release;Platform=x64 /restore:true
   mono $HOME/.nuget/packages/xunit.runner.console/*/tools/net452/xunit.console.exe ./test/BinaryEncoding.Tests/bin/x64/Release/net452/BinaryEncoding.Tests.dll
 fi
