@@ -10,9 +10,9 @@
     <RepositoryUrl>https://github.com/tabrath/BinaryEncoding</RepositoryUrl>
     <description>Easily encode numbers to and from binary format</description>
     <releaseNotes></releaseNotes>
-    <copyright>Copyright 2018</copyright>
+    <copyright>Copyright 2019</copyright>
     <PackageTags>Binary Encoding BigEndian LittleEndian Varint</PackageTags>
-    <VersionPrefix>1.4.0</VersionPrefix>
+    <VersionPrefix>1.5.0</VersionPrefix>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <OutputType>Library</OutputType>
