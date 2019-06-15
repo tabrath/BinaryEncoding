@@ -1,22 +1,14 @@
 language: csharp
 solution: BinaryEncoding.sln
 
-matrix:
-  include:
-    - dotnet: 2.1.300-preview2-008533
-      mono: none
-      env: DOTNET=1
-      os: linux
-    - mono: latest
-      env: MONO=1
-      os: linux
-    - dotnet: 2.1.300-preview2-008533
-      mono: none
-      env: DOTNET=1
-      os: osx
-    - mono: latest
-      env: MONO=1
-      os: osx
+sudo: required
+dist: xenial
+mono: latest
+dotnet: 2.2.300
+
+os:
+  - linux
+  - osx
 
 notifications:
   email:
@@ -32,6 +24,7 @@ cache:
   directories:
   - ./packages
   - /.dotnetcli
+  - $HOME/.nuget/packages
   - $HOME/Library/Caches/Homebrew
 
 before_install:
@@ -39,8 +32,8 @@ before_install:
 
 install:
   - git config --global core.autocrlf input
-  - chmod +x ./build.sh
 
 script:
-  - ./build.sh
-
+  - dotnet build -c Release
+  - dotnet test -c Release -f netcoreapp2.2 --no-build --no-restore --blame
+  - mono $HOME/.nuget/packages/xunit.runner.console/*/tools/net452/xunit.console.exe ./test/BinaryEncoding.Tests/bin/Release/net452/BinaryEncoding.Tests.dll

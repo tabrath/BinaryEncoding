@@ -1,4 +1,6 @@
-﻿namespace BinaryEncoding
+﻿using System;
+
+namespace BinaryEncoding
 {
     public static partial class Binary
     {
