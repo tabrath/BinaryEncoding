@@ -79,8 +79,7 @@ stages:
     - download: current
       artifact: 'packages'
     - script: |
-        temp=$(ls "$(Pipeline.Workspace)/packages/prereleases")
-        temp=$(echo $temp | cut -d . -f 2-5)
+        temp=$(ls "$(Pipeline.Workspace)/packages/prereleases"| cut -d . -f 2-5)
         echo "##vso[task.setvariable variable=version;isOutput=true]$temp"
     - script: |
         echo "Version: $(version)"
@@ -95,15 +94,15 @@ stages:
       inputs:
         command: 'custom'
         projects: 'test/**/*.csproj'
-        custom: 'remove package'
-        arguments: 'BinaryEncoding'
+        custom: 'remove'
+        arguments: 'package BinaryEncoding'
     - task: DotNetCoreCLI@2
       displayName: "Add package reference"
       inputs:
         command: 'custom'
         projects: 'test/**/*.csproj'
-        custom: 'add package'
-        arguments: 'BinaryEncoding --version $(version) --source https://pkgs.dev.azure.com/tabrath/BinaryEncoding/_packaging/binary-encoding/nuget/v3/index.json'
+        custom: 'add'
+        arguments: 'package BinaryEncoding --version $(version) --source https://pkgs.dev.azure.com/tabrath/BinaryEncoding/_packaging/binary-encoding/nuget/v3/index.json'
 
     - task: DotNetCoreCLI@2
       inputs:
