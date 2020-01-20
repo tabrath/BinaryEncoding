@@ -57,12 +57,15 @@ stages:
         arguments: '--configuration $(buildConfiguration)'
         nobuild: true
 
-    - script: |
-        temp=$(ls "$(Build.ArtifactStagingDirectory)/packages/prereleases")
-        echo "##vso[task.setvariable variable=version;isOutput=true]$temp | cut -d . -f 2-5"
-
     - publish: '$(Build.ArtifactStagingDirectory)/packages'
       artifact: 'packages'
+      
+    - task: NuGetCommand@2
+      inputs:
+        command: 'push'
+        packagesToPush: '$(Build.ArtifactStagingDirectory)/packages/prereleases/*.nupkg'
+        nuGetFeedType: 'internal'
+        publishVstsFeed: '244fc4dd-c57d-4d7a-b51c-53da68b0aeeb/ab707810-8716-4b0e-90e0-aefe6f54a83d'
 
 - stage: 'Test'
   displayName: 'Run Tests'
@@ -73,12 +76,51 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-    - checkout: none
     - download: current
       artifact: 'packages'
     - script: |
+        temp=$(ls "$(Build.ArtifactStagingDirectory)/packages/prereleases")
+        echo "##vso[task.setvariable variable=version;isOutput=true]$temp | cut -d . -f 2-5"
+    - script: |
         echo "Version: $(version)"
         echo "BuildNumber: $(Build.BuildNumber)"
+    - task: UseDotNet@2
+      displayName: 'Use .NET Core sdk'
+      inputs:
+        packageType: sdk
+        version: 3.1.x
+        installationPath: $(Agent.ToolsDirectory)/dotnet
+    - script: dotnet remove reference BinaryEncoding
+      displayName: 'Remove package reference'
+    - task: DotNetCoreCLI@2
+      displayName: "Add package reference"
+      inputs:
+        command: add package
+        projects: 'test/**/*.csproj'
+        arguments: 'BinaryEncoding --version $(version) --source https://pkgs.dev.azure.com/tabrath/BinaryEncoding/_packaging/binary-encoding/nuget/v3/index.json'
+
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: test
+        projects: 'test/**/*.csproj'
+        arguments: -c $(buildConfiguration) --settings $(System.DefaultWorkingDirectory)/CodeCoverage.runsettings --collect:"XPlat Code Coverage" -- RunConfiguration.DisableAppDomain=true
+      displayName: Run Tests
+
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: custom
+        custom: tool
+        arguments: install --tool-path . dotnet-reportgenerator-globaltool
+      displayName: Install ReportGenerator tool
+  
+    - script: reportgenerator -reports:$(Agent.TempDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/coverlet/reports -reporttypes:"Cobertura"
+      displayName: Create reports
+  
+    - task: PublishCodeCoverageResults@1
+      displayName: 'Publish code coverage'
+      inputs:
+        codeCoverageTool: Cobertura
+        summaryFileLocation: $(Build.SourcesDirectory)/coverlet/reports/Cobertura.xml  
         
 #- stage: 'PublishPrereleaseNuGetPackage'
 #  displayName: 'Publish Prerelease NuGet Package'
