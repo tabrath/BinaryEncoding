@@ -75,15 +75,14 @@ stages:
   - job:
     pool:
       vmImage: 'ubuntu-latest'
-    variables:
-      version: ''
     steps:
     - download: current
       artifact: 'packages'
     - script: |
-        echo "##vso[task.setvariable variable=version;isOutput=true]`ls $(Pipeline.Workspace)/packages/prereleases | cut -d . -f 2-5`"
+        export VERSION=$(ls $(Pipeline.Workspace)/packages/prereleases | cut -d . -f 2-5)
+        echo "##vso[task.setvariable variable=VERSION;isOutput=true]$VERSION"
     - script: |
-        echo "Version: $(version)"
+        echo "Version: $(VERSION)"
     - task: UseDotNet@2
       displayName: 'Use .NET Core sdk'
       inputs:
@@ -103,7 +102,7 @@ stages:
         command: 'custom'
         projects: 'test/**/*.csproj'
         custom: 'add'
-        arguments: 'package BinaryEncoding --version $(version) --source https://pkgs.dev.azure.com/tabrath/BinaryEncoding/_packaging/binary-encoding/nuget/v3/index.json'
+        arguments: 'package BinaryEncoding --version $(VERSION) --source https://pkgs.dev.azure.com/tabrath/BinaryEncoding/_packaging/binary-encoding/nuget/v3/index.json'
 
     - task: DotNetCoreCLI@2
       inputs:
