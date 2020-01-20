@@ -75,12 +75,13 @@ stages:
   - job:
     pool:
       vmImage: 'ubuntu-latest'
+    variables:
+      version: ''
     steps:
     - download: current
       artifact: 'packages'
     - script: |
-        temp=$(ls "$(Pipeline.Workspace)/packages/prereleases"| cut -d . -f 2-5)
-        echo "##vso[task.setvariable variable=version;isOutput=true]$temp"
+        echo "##vso[task.setvariable variable=version;isOutput=true]ls $(Pipeline.Workspace)/packages/prereleases | cut -d . -f 2-5)"
     - script: |
         echo "Version: $(version)"
     - task: UseDotNet@2
@@ -95,7 +96,7 @@ stages:
         command: 'custom'
         projects: 'test/**/*.csproj'
         custom: 'remove'
-        arguments: 'package BinaryEncoding'
+        arguments: 'reference BinaryEncoding'
     - task: DotNetCoreCLI@2
       displayName: "Add package reference"
       inputs:
