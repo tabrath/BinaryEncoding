@@ -1,6 +1,9 @@
 trigger:
 - master
 
+variables:
+  version: ''
+
 stages:
 - stage: 'Build'
   variables:
@@ -52,11 +55,11 @@ stages:
         buildProperties: 'VersionSuffix="$(Build.BuildNumber)"'
         packDirectory: '$(Build.ArtifactStagingDirectory)/packages/prereleases'
         arguments: '--configuration $(buildConfiguration)'
+        nobuild: true
 
     - script: |
         temp=$(ls "$(Build.ArtifactStagingDirectory)/packages/prereleases")
         echo "##vso[task.setvariable variable=version;isOutput=true]$temp | cut -d . -f 2-5"
-      name: setversion
 
     - publish: '$(Build.ArtifactStagingDirectory)/packages'
       artifact: 'packages'
@@ -69,13 +72,13 @@ stages:
   - job:
     pool:
       vmImage: 'ubuntu-latest'
-    variables:
-      version: $[ dependencies.Build.outputs['Build.setversion.version'] ]
     steps:
     - checkout: none
     - download: current
       artifact: 'packages'
-    - script: echo $(version)
+    - script: |
+        echo "Version: $(version)"
+        echo "BuildNumber: $(Build.BuildNumber)"
         
 #- stage: 'PublishPrereleaseNuGetPackage'
 #  displayName: 'Publish Prerelease NuGet Package'
