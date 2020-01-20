@@ -67,6 +67,8 @@ stages:
         nuGetFeedType: 'internal'
         publishVstsFeed: '244fc4dd-c57d-4d7a-b51c-53da68b0aeeb/ab707810-8716-4b0e-90e0-aefe6f54a83d'
 
+# TODO: When we get this to run, eventually, we'll run tests on different runtimes and frameworks,
+# hopefully in paralell..
 - stage: 'Test'
   displayName: 'Run Tests'
   dependsOn: 'Build'
@@ -75,14 +77,16 @@ stages:
   - job:
     pool:
       vmImage: 'ubuntu-latest'
+    variables:
+      PKG_VERSION: ''
     steps:
     - download: current
       artifact: 'packages'
     - script: |
-        export VERSION=$(ls $(Pipeline.Workspace)/packages/prereleases | cut -d . -f 2-5)
-        echo "##vso[task.setvariable variable=VERSION;isOutput=true]$VERSION"
+        export PKG_VERSION=`ls $(Pipeline.Workspace)/packages/prereleases | cut -d . -f 2-5`
+        echo "##vso[task.setvariable variable=PKG_VERSION;isOutput=true]$PKG_VERSION"
     - script: |
-        echo "Version: $(VERSION)"
+        echo "Version: $PKG_VERSION"
     - task: UseDotNet@2
       displayName: 'Use .NET Core sdk'
       inputs:
@@ -92,17 +96,17 @@ stages:
     - task: DotNetCoreCLI@2
       displayName: 'Remove package reference'
       inputs:
-        command: 'custom'
-        projects: 'test/**/*.csproj'
-        custom: 'remove'
-        arguments: 'reference BinaryEncoding'
+        command: custom
+        projects: test/**/*.csproj
+        custom: remove
+        arguments: reference BinaryEncoding
     - task: DotNetCoreCLI@2
       displayName: "Add package reference"
       inputs:
-        command: 'custom'
-        projects: 'test/**/*.csproj'
-        custom: 'add'
-        arguments: 'package BinaryEncoding --version $(VERSION) --source https://pkgs.dev.azure.com/tabrath/BinaryEncoding/_packaging/binary-encoding/nuget/v3/index.json'
+        command: custom
+        projects: test/**/*.csproj
+        custom: add
+        arguments: package BinaryEncoding --version $(PKG_VERSION) --source https://pkgs.dev.azure.com/tabrath/BinaryEncoding/_packaging/binary-encoding/nuget/v3/index.json
 
     - task: DotNetCoreCLI@2
       inputs:
