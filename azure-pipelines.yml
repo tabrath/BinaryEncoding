@@ -81,7 +81,7 @@ stages:
     - download: current
       artifact: 'packages'
     - script: |
-        echo "##vso[task.setvariable variable=version;isOutput=true]ls $(Pipeline.Workspace)/packages/prereleases | cut -d . -f 2-5)"
+        echo "##vso[task.setvariable variable=version;isOutput=true]`ls $(Pipeline.Workspace)/packages/prereleases | cut -d . -f 2-5`"
     - script: |
         echo "Version: $(version)"
     - task: UseDotNet@2
