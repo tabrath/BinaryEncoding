@@ -53,10 +53,10 @@ stages:
         packDirectory: '$(Build.ArtifactStagingDirectory)/packages/prereleases'
         arguments: '--configuration $(buildConfiguration)'
 
-	- script: |
-		temp=$(ls "$(Build.ArtifactStagingDirectory)/packages/prereleases")
-		echo "##vso[task.setvariable variable=version;isOutput=true]$temp | cut -d . -f 2-5"
-        
+    - script: |
+        temp=$(ls "$(Build.ArtifactStagingDirectory)/packages/prereleases")
+        echo "##vso[task.setvariable variable=version;isOutput=true]$temp | cut -d . -f 2-5"
+
     - publish: '$(Build.ArtifactStagingDirectory)/packages'
       artifact: 'packages'
         
