@@ -181,7 +181,7 @@ namespace BinaryEncoding
                             value = 0;
                             return -(i + 1); // overflow
                         }
-                        value |= (ulong)(buffer[i] << s);
+                        value |= (ulong)(buffer[i]) << s;
                         return i + 1;
                     }
                     value |= (ulong)(buffer[i] & 0x7f) << s;
