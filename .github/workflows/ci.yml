@@ -38,20 +38,21 @@ jobs:
         run: dotnet build -c Release --no-restore
 
       - name: Test .NET Framework 4.8
-        run: dotnet test -c Release -f net48 -r ./artifacts -l trx --no-build /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=net48 /p:Exclude=[xunit.*]*
+        run: dotnet test -c Release -f net48 -r ./artifacts -l trx --no-build /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:Exclude=[xunit.*]*
 
       - name: Test .NET Core 3.1
-        run: dotnet test -c Release -f netcoreapp3.1 -r ./artifacts -l trx --no-build /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=netcoreapp31 /p:Exclude=[xunit.*]*
+        run: dotnet test -c Release -f netcoreapp3.1 -r ./artifacts -l trx --no-build /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:Exclude=[xunit.*]*
 
       - name: Test .NET 5
-        run: dotnet test -c Release -f net5 -r ./artifacts -l trx --no-build /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=net5 /p:Exclude=[xunit.*]*
+        run: dotnet test -c Release -f net5 -r ./artifacts -l trx --no-build /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:Exclude=[xunit.*]*
 
       - name: Test .NET 6
-        run: dotnet test -c Release -f net6 -r ./artifacts -l trx --no-build /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=net6 /p:Exclude=[xunit.*]*
+        run: dotnet test -c Release -f net6 -r ./artifacts -l trx --no-build /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:Exclude=[xunit.*]*
 
-      - uses: codecov/codecov-action@v2
+      - name: Upload code coverage
+        uses: codecov/codecov-action@v2
         with:
-          files: ./test/BinaryEncoding.Tests/net48.opencover.xml,./test/BinaryEncoding.Tests/netcoreapp31.opencover.xml,./test/BinaryEncoding.Tests/net5.opencover.xml,./test/BinaryEncoding.Tests/net6.opencover.xml
+          files: ./test/BinaryEncoding.Tests/coverage.net48.opencover.xml,./test/BinaryEncoding.Tests/coverage.netcoreapp31.opencover.xml,./test/BinaryEncoding.Tests/coverage.net5.opencover.xml,./test/BinaryEncoding.Tests/coverage.net6.opencover.xml
           flags: unittests # optional
           name: codecov-umbrella # optional
           fail_ci_if_error: true # optional (default = false)
