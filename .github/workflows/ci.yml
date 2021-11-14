@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Setup dotnet 6.0
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "6.0.x"
+
+      - name: Setup dotnet 5.0
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "5.0.x"
+
+      - name: Setup dotnet 3.1
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "3.1.x"
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build -c Release --no-restore
+
+      - name: Test .NET Framework 4.8
+        run: dotnet test -c Release -f net48 -r ./artifacts -l trx --no-build /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=net48 /p:Exclude=[xunit.*]*
+
+      - name: Test .NET Core 3.1
+        run: dotnet test -c Release -f netcoreapp3.1 -r ./artifacts -l trx --no-build /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=netcoreapp31 /p:Exclude=[xunit.*]*
+
+      - name: Test .NET 5
+        run: dotnet test -c Release -f net5 -r ./artifacts -l trx --no-build /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=net5 /p:Exclude=[xunit.*]*
+
+      - name: Test .NET 6
+        run: dotnet test -c Release -f net6 -r ./artifacts -l trx --no-build /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=net6 /p:Exclude=[xunit.*]*
+
+      - uses: codecov/codecov-action@v2
+        with:
+          files: ./test/BinaryEncoding.Tests/net48.opencover.xml,./test/BinaryEncoding.Tests/netcoreapp31.opencover.xml,./test/BinaryEncoding.Tests/net5.opencover.xml,./test/BinaryEncoding.Tests/net6.opencover.xml
+          flags: unittests # optional
+          name: codecov-umbrella # optional
+          fail_ci_if_error: true # optional (default = false)
+          verbose: true # optional (default = false)

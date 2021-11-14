@@ -1,0 +1,39 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "*.*.*"
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Setup dotnet 6.0
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "6.0.x"
+
+      - name: Pack
+        run: dotnet pack ./src/BinaryEncoding/BinaryEncoding.csproj -c Release -o ./artifacts --no-build
+
+      - name: Publish
+        run: dotnet nuget push ./artifacts/**/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
+
+      - name: Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: artifacts
+          path: artifacts/**/*
+
+      - name: Create release
+        uses: "marvinpinto/action-automatic-releases@v1.2.1"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
