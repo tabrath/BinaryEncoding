@@ -1,14 +1,20 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31808.319
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B40D7F8C-AC59-4C28-954C-B73B01771D66}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BinaryEncoding", "src\BinaryEncoding\BinaryEncoding.csproj", "{4FE3B85C-8F9B-489F-9AF2-5928842540E8}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{863CE3AB-B945-45DD-B9F4-CED015E4FBC7}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BinaryEncoding.Tests", "test\BinaryEncoding.Tests\BinaryEncoding.Tests.csproj", "{571EF7FA-9AC3-4059-884C-CEAFE9B2279A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3AE44A53-6DC2-4F0A-88CC-F80220044559}"
+	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		Directory.Build.props = Directory.Build.props
+		LICENSE = LICENSE
+		NuGet.config = NuGet.config
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,8 +55,7 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{4FE3B85C-8F9B-489F-9AF2-5928842540E8} = {B40D7F8C-AC59-4C28-954C-B73B01771D66}
-		{571EF7FA-9AC3-4059-884C-CEAFE9B2279A} = {863CE3AB-B945-45DD-B9F4-CED015E4FBC7}
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F4BD0191-ED63-49B2-A956-FE3111D5E1AA}
 	EndGlobalSection
 EndGlobal

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
@@ -14,6 +14,7 @@ namespace BinaryEncoding
         public abstract partial class EndianCodec
         {
             private static T Read<T>(Stream stream, Func<byte[], int, T> func)
+                where T : struct
             {
                 if (stream == null)
                     throw new ArgumentNullException(nameof(stream));
@@ -21,15 +22,11 @@ namespace BinaryEncoding
                 if (!stream.CanRead)
                     throw new Exception("Stream is not readable");
 
-#if NETSTANDARD1_1
-                var size = Marshal.SizeOf(typeof(T));
-#else
                 var size = Marshal.SizeOf<T>();
-#endif
                 var buffer = ArrayPool<byte>.Shared.Rent(size);
                 T result = default(T);
                 try
-                { 
+                {
                     var bytesRead = stream.Read(buffer, 0, size);
                     if (bytesRead <= 0)
                         throw new EndOfStreamException();
@@ -47,6 +44,7 @@ namespace BinaryEncoding
             }
 
             private static async Task<T> ReadAsync<T>(Stream stream, Func<byte[], int, T> func, CancellationToken cancellationToken = default(CancellationToken))
+                where T : struct
             {
                 if (stream == null)
                     throw new ArgumentNullException(nameof(stream));
@@ -54,11 +52,7 @@ namespace BinaryEncoding
                 if (!stream.CanRead)
                     throw new Exception("Stream is not readable");
 
-#if NETSTANDARD1_1
-                var size = Marshal.SizeOf(typeof(T));
-#else
                 var size = Marshal.SizeOf<T>();
-#endif
                 var buffer = ArrayPool<byte>.Shared.Rent(size);
                 T result = default(T);
                 try
@@ -107,6 +101,7 @@ namespace BinaryEncoding
             public Task<ulong[]> ReadUInt64Async(Stream stream, int count, CancellationToken cancellationToken = default(CancellationToken)) => Task.WhenAll(Enumerable.Range(0, count).Select(_ => ReadUInt64Async(stream, cancellationToken)));
 
             private static int Write<T>(Stream stream, T value, Func<T, byte[], int, int> func)
+                where T : struct
             {
                 if (stream == null)
                     throw new ArgumentNullException(nameof(stream));
@@ -114,11 +109,7 @@ namespace BinaryEncoding
                 if (!stream.CanWrite)
                     throw new Exception("Stream is not writable");
 
-#if NETSTANDARD1_1
-                var size = Marshal.SizeOf(typeof(T));
-#else
                 var size = Marshal.SizeOf<T>();
-#endif
                 var buffer = ArrayPool<byte>.Shared.Rent(size);
                 int length = -1;
                 try
@@ -134,6 +125,7 @@ namespace BinaryEncoding
             }
 
             private static async Task<int> WriteAsync<T>(Stream stream, T value, Func<T, byte[], int, int> func, CancellationToken cancellationToken = default(CancellationToken))
+                where T : struct
             {
                 if (stream == null)
                     throw new ArgumentNullException(nameof(stream));
@@ -141,11 +133,7 @@ namespace BinaryEncoding
                 if (!stream.CanWrite)
                     throw new Exception("Stream is not writable");
 
-#if NETSTANDARD1_1
-                var size = Marshal.SizeOf(typeof(T));
-#else
                 var size = Marshal.SizeOf<T>();
-#endif
                 var buffer = ArrayPool<byte>.Shared.Rent(size);
                 int length = -1;
                 try

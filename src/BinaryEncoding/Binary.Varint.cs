@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,11 +27,11 @@ namespace BinaryEncoding
                 return i + 1;
             }
 
-            public static byte[] GetBytes(short value) => GetBytes((ulong) value);
-            public static byte[] GetBytes(int value) => GetBytes((ulong) value);
-            public static byte[] GetBytes(long value) => GetBytes((ulong) value);
-            public static byte[] GetBytes(ushort value) => GetBytes((ulong) value);
-            public static byte[] GetBytes(uint value) => GetBytes((ulong) value);
+            public static byte[] GetBytes(short value) => GetBytes((ulong)value);
+            public static byte[] GetBytes(int value) => GetBytes((ulong)value);
+            public static byte[] GetBytes(long value) => GetBytes((ulong)value);
+            public static byte[] GetBytes(ushort value) => GetBytes((ulong)value);
+            public static byte[] GetBytes(uint value) => GetBytes((ulong)value);
 
             public static byte[] GetBytes(ulong value)
             {
@@ -76,7 +76,7 @@ namespace BinaryEncoding
                 return Write(buffer, ux);
             }
 
-            public static int Write(Stream stream, ushort value) => Write(stream, (ulong) value);
+            public static int Write(Stream stream, ushort value) => Write(stream, (ulong)value);
             public static int Write(Stream stream, uint value) => Write(stream, (ulong)value);
 
             public static int Write(Stream stream, ulong value)
@@ -88,7 +88,7 @@ namespace BinaryEncoding
                     value >>= 7;
                     i++;
                 }
-                stream.WriteByte((byte) value);
+                stream.WriteByte((byte)value);
                 return i + 1;
             }
 

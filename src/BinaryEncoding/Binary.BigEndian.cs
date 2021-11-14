@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.CompilerServices;
 
 namespace BinaryEncoding
@@ -102,7 +102,7 @@ namespace BinaryEncoding
             public override short GetInt16(byte[] bytes, int offset = 0) => GetInt16(bytes.AsSpan(offset));
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public override ushort GetUInt16(ReadOnlySpan<byte> bytes) => (ushort) (bytes[1] | bytes[0] << 8);
+            public override ushort GetUInt16(ReadOnlySpan<byte> bytes) => (ushort)(bytes[1] | bytes[0] << 8);
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public override ushort GetUInt16(byte[] bytes, int offset = 0) => GetUInt16(bytes.AsSpan(offset));
