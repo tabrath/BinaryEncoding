@@ -1,0 +1,20 @@
+{
+  "version": "1.6",
+  "pathFilters": [
+    "src"
+  ],
+  "publicReleaseRefSpec": [
+    "^refs/heads/master$",
+    "^refs/tags/v\\d+\\.\\d+"
+  ],
+  "cloudBuild": {
+    "setVersionVariables": true,
+    "buildNumber": {
+      "enabled": false,
+      "includeCommitId": {
+        "when": "nonPublicReleaseOnly",
+        "where": "buildMetadata"
+      }
+    }
+  }
+}
