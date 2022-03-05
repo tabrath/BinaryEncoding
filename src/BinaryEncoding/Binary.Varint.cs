@@ -232,7 +232,7 @@ namespace BinaryEncoding
                         {
                             return i + 1;
                         }
-                        value |= (ulong)(b << s);
+                        value |= (ulong)(b) << s;
                         return i + 1;
                     }
                     value |= (ulong)(b & 0x7f) << s;
@@ -282,7 +282,7 @@ namespace BinaryEncoding
                         {
                             return value;
                         }
-                        value |= (ulong)(buffer[0] << s);
+                        value |= (ulong)(buffer[0]) << s;
                         return value;
                     }
                     value |= (ulong)(buffer[0] & 0x7f) << s;
